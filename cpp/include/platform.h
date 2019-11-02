@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <cstdint>
 
-namespace Simuro {
+namespace cpp_interface {
 
 	static const int PLAYERS_PER_SIDE = 5;
 	static const int MAX_STRING_LEN = 128;

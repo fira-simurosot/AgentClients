@@ -15,10 +15,10 @@ configure_file(
 add_executable(AgentClient
         config.h
         include/platform.h
-        src/main.cpp)
+        src/main.cpp src/cpp_strategy.cpp include/cpp_strategy.h)
 
 target_include_directories(AgentClient PRIVATE
         include
         ${PROJECT_BINARY_DIR})
-target_link_libraries(AgentClient PRIVATE CLI11::CLI11)
+target_link_libraries(AgentClient PRIVATE CLI11::CLI11 ${CMAKE_DL_LIBS})
 target_compile_features(AgentClient PRIVATE cxx_std_14)
