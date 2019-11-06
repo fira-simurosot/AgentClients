@@ -36,7 +36,11 @@ add_executable(AgentClient
         ${GRPC_SRCS}
         ${GRPC_HDRS}
         include/platform.h
-        src/main.cpp src/cpp_strategy.cpp include/cpp_strategy.h)
+        src/main.cpp
+        src/cpp_strategy.cpp
+        include/cpp_strategy.h
+        src/strategy_server.cpp
+        include/strategy_server.h)
 
 target_include_directories(AgentClient PRIVATE
         include

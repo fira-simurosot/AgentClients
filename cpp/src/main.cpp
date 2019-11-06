@@ -2,6 +2,7 @@
 #include <string>
 #include "CLI/CLI.hpp"
 #include "config.h"
+#include "strategy_server.h"
 
 int main(int argc, char **argv) {
     CLI::App app(PROJECT_DESCRIPTION);
@@ -18,4 +19,6 @@ int main(int argc, char **argv) {
             ->check(CLI::ExistingFile);
 
     CLI11_PARSE(app, argc, argv);
+
+    run_strategy_server("localhost:50051");
 }
