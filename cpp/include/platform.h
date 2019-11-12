@@ -4,7 +4,7 @@
 namespace cpp_interface {
 
 	static const int PLAYERS_PER_SIDE = 5;
-	static const int MAX_STRING_LEN = 128;
+	static const int MAX_STRING_LEN = 256;
 
 	enum EventType {
 		JudgeResult = 0,
@@ -40,7 +40,7 @@ namespace cpp_interface {
 	};
 
 	struct TeamInfo {
-		wchar_t teamName[MAX_STRING_LEN];
+		char teamName[MAX_STRING_LEN];
 	};
 
 	struct Ball {

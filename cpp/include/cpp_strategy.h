@@ -3,7 +3,7 @@
 #include <string>
 #include "platform.h"
 
-class cpp_strategy {
+class CppStrategy {
     void *handle;
 
     using OnEvent = void (*)(cpp_interface::EventType type, void *argument);
@@ -12,8 +12,8 @@ class cpp_strategy {
     using GetPlacement = void (*)(cpp_interface::Field *field);
 
 public:
-    explicit cpp_strategy(const std::string& so_name);
-    ~cpp_strategy();
+    explicit CppStrategy(const std::string& so_name);
+    ~CppStrategy();
 
     OnEvent on_event;
     GetInstruction get_instruction;

@@ -38,7 +38,9 @@ add_executable(AgentClient
         src/cpp_strategy.cpp
         include/cpp_strategy.h
         src/strategy_server.cpp
-        include/strategy_server.h)
+        include/strategy_server.h
+        src/convert.cpp
+        include/convert.h)
 
 target_include_directories(AgentClient PRIVATE
         include

@@ -16,7 +16,7 @@ T dlsym_wrapper(void *handle, const char *name) {
     return sym;
 }
 
-cpp_strategy::cpp_strategy(const std::string& so_name) {
+CppStrategy::CppStrategy(const std::string& so_name) {
     handle = dlopen(so_name.c_str(), RTLD_LAZY);
 
     if (!handle) {
@@ -29,6 +29,6 @@ cpp_strategy::cpp_strategy(const std::string& so_name) {
     get_team_info = dlsym_wrapper<GetTeamInfo>(handle, "GetTeamInfo");
 }
 
-cpp_strategy::~cpp_strategy() {
+CppStrategy::~CppStrategy() {
     dlclose(handle);
 }

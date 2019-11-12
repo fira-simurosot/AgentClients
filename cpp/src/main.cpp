@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "CLI/CLI.hpp"
+#include <CLI/CLI.hpp>
 #include "config.h"
 #include "strategy_server.h"
 
@@ -20,5 +20,5 @@ int main(int argc, char **argv) {
 
     CLI11_PARSE(app, argc, argv);
 
-    run_strategy_server("localhost:50051");
+    run_strategy_server("0.0.0.0:50051", so_name);
 }
