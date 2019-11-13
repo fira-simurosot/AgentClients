@@ -78,7 +78,7 @@ cpp_interface::Robot to_cpp_interface(const fira_message::Robot &robot) {
     };
 }
 
-static void transform_robots(const cpp_interface::Robot *target,
+static void transform_robots(cpp_interface::Robot *target,
                              const google::protobuf::RepeatedPtrField<fira_message::Robot> &source) {
     std::vector<fira_message::Robot> self_robot_vec;
     std::copy(source.begin(), source.end(), self_robot_vec.begin());

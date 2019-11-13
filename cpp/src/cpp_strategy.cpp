@@ -30,5 +30,6 @@ CppStrategy::CppStrategy(const std::string& so_name) {
 }
 
 CppStrategy::~CppStrategy() {
-    dlclose(handle);
+    if (handle)
+        dlclose(handle);
 }

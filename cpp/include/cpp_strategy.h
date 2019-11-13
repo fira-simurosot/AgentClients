@@ -13,6 +13,11 @@ class CppStrategy {
 
 public:
     explicit CppStrategy(const std::string& so_name);
+    CppStrategy(const CppStrategy&) = delete;
+    CppStrategy& operator=(const CppStrategy&) = delete;
+    // the following two are not necessarily deleted, but should have a custom implementation
+    CppStrategy(CppStrategy&&) = delete;
+    CppStrategy& operator=(CppStrategy&&) = delete;
     ~CppStrategy();
 
     OnEvent on_event;
