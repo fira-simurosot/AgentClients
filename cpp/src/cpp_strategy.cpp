@@ -1,12 +1,10 @@
 #include "cpp_strategy.h"
-#include "platform.h"
 #include <dlfcn.h>
 #include <string>
-#include <functional>
 #include <system_error>
 
 template <typename T>
-T dlsym_wrapper(void *handle, const char *name) {
+static T dlsym_wrapper(void *handle, const char *name) {
     dlerror();
     auto sym = (T) dlsym(handle, name);
     const char * dlsym_error = dlerror();
@@ -16,20 +14,16 @@ T dlsym_wrapper(void *handle, const char *name) {
     return sym;
 }
 
-CppStrategy::CppStrategy(const std::string& so_name) {
-    handle = dlopen(so_name.c_str(), RTLD_LAZY);
+CppStrategy::CppStrategy(const std::string& so_name)
+        : handle(dlopen(so_name.c_str(), RTLD_LAZY), close_fn) {
 
     if (!handle) {
         throw std::system_error(std::error_code(), dlerror());
     }
 
-    on_event = dlsym_wrapper<OnEvent>(handle, "OnEvent");
-    get_instruction = dlsym_wrapper<GetInstruction>(handle, "GetInstruction");
-    get_placement = dlsym_wrapper<GetPlacement>(handle, "GetPlacement");
-    get_team_info = dlsym_wrapper<GetTeamInfo>(handle, "GetTeamInfo");
+    on_event = dlsym_wrapper<OnEvent>(handle.get(), "OnEvent");
+    get_instruction = dlsym_wrapper<GetInstruction>(handle.get(), "GetInstruction");
+    get_placement = dlsym_wrapper<GetPlacement>(handle.get(), "GetPlacement");
+    get_team_info = dlsym_wrapper<GetTeamInfo>(handle.get(), "GetTeamInfo");
 }
 
-CppStrategy::~CppStrategy() {
-    if (handle)
-        dlclose(handle);
-}

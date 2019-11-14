@@ -1,10 +1,14 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <dlfcn.h>
 #include "platform.h"
 
 class CppStrategy {
-    void *handle;
+    // use std::unique_ptr to store handle in order to make CppStrategy move-only
+    static constexpr auto close_fn = [](void *handle) { dlclose(handle); };
+    std::unique_ptr<void, decltype(close_fn)> handle;
 
     using OnEvent = void (*)(cpp_interface::EventType type, void *argument);
     using GetTeamInfo = void (*)(cpp_interface::TeamInfo *teamInfo);
@@ -13,12 +17,6 @@ class CppStrategy {
 
 public:
     explicit CppStrategy(const std::string& so_name);
-    CppStrategy(const CppStrategy&) = delete;
-    CppStrategy& operator=(const CppStrategy&) = delete;
-    // the following two are not necessarily deleted, but should have a custom implementation
-    CppStrategy(CppStrategy&&) = delete;
-    CppStrategy& operator=(CppStrategy&&) = delete;
-    ~CppStrategy();
 
     OnEvent on_event;
     GetInstruction get_instruction;
