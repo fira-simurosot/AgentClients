@@ -19,6 +19,8 @@ StrategyServer::Register(grpc::ServerContext *context,
     cpp_interface::TeamInfo team_info{};
     cpp_strategy.get_team_info(&team_info);
     response->set_name(team_info.teamName);
+
+    return grpc::Status::OK;
 }
 
 grpc::Status
@@ -60,8 +62,8 @@ StrategyServer::SetLaterRobots(grpc::ServerContext *context,
 }
 
 StrategyServer::StrategyServer(const std::string &so_name)
-        : cpp_strategy(so_name),
-          current_phase(static_cast<FoulInfo_PhaseType>(-1)) {
+        : current_phase(FoulInfo_PhaseType::FoulInfo_PhaseType_Stopped),
+          cpp_strategy(so_name) {
 }
 
 void StrategyServer::notify_phase_change(const FoulInfo_PhaseType& phase) {
