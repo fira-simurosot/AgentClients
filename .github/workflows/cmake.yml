@@ -28,5 +28,9 @@ jobs:
       run: |
         cmake --version
         mkdir build && cd build && cmake ../cpp
-    - name: Build
+    - name: Build with comiler
       run: cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER --build build
+      if: ${{ matrix.cxx_compiler != '' }}
+    - name: Build
+      run: cmake --build build
+      if: ${{ matrix.cxx_compiler == '' }}
