@@ -23,10 +23,10 @@ jobs:
       with:
         submodules: recursive
     - name: Install protobuf and gRPC
-      run: sudo apt install -y libgrpc++-dev libprotobuf-dev
+      run: sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
     - name: Configure
       run: |
         cmake --version
         mkdir build && cd build && cmake ../cpp
     - name: Build
-      run: cmake --build build
+      run: cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER --build build
