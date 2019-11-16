@@ -19,7 +19,7 @@ jobs:
             cxx-compiler: "/usr/bin/clang++"
 
     steps:
-    - uses: actions/checkout@V1
+    - uses: actions/checkout@v1
       with:
         submodules: recursive
     - name: Install protobuf and gRPC
