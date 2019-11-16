@@ -19,7 +19,9 @@ jobs:
             cxx-compiler: "/usr/bin/clang++"
 
     steps:
-    - uses: textbook/git-checkout-submodule-action@1.0.0
+    - uses: actions/checkout@V1
+      with:
+        submodules: recursive
     - name: Install protobuf and gRPC
       run: sudo apt install -y libgrpc++-dev libprotobuf-dev
     - name: Configure
