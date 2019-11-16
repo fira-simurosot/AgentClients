@@ -84,7 +84,7 @@ void run_strategy_server(const std::string &addr, const std::string &so_name) {
     grpc::ServerBuilder builder;
     builder.AddListeningPort(addr, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
-    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    std::unique_ptr server(builder.BuildAndStart());
     std::cout << "Server listening on " << addr << std::endl;
 
     server->Wait();
