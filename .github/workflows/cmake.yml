@@ -13,12 +13,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04, windows-2019]
-        include:
-          - os: ubuntu-18.04
-            cxx-compiler: "/usr/bin/g++"
-          - os: ubuntu-18.04
-            cxx-compiler: "/usr/bin/clang++"
+        cxx-compiler: ["/usr/bin/clang++", ""]
+        exclude:
           - os: windows-2019
+            cxx-compiler: "/usr/bin/clang++"
 
     steps:
     - uses: actions/checkout@v1
