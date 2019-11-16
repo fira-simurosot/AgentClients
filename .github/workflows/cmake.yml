@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install protobuf and gRPC
-      run: apt install -y libgrpc++-dev libprotobuf-dev
+      run: sudo apt install -y libgrpc++-dev libprotobuf-dev
     - name: Configure
       run: |
         cmake --version
