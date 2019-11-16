@@ -27,6 +27,7 @@ jobs:
         cd grpc &&
         pushd third_party/protobuf &&
         ./autogen.sh &&
+        ./configure
         sudo make install &&
         popd &&
         sudo make install
