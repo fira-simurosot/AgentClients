@@ -20,11 +20,10 @@ configure_file(
         ${PROJECT_BINARY_DIR}/config.h)
 
 file(GLOB_RECURSE PROTO_FILES "FIRAMessage/*.proto")
-message(VERBOSE "Found Proto files: ${PROTO_FILES}")
 
+#To generate gRPC C++ sources: ${GRPC_SRCS}
+#To generate gRPC C++ headers: ${GRPC_HDRS}
 grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_FILES})
-message(VERBOSE "To generate gRPC C++ sources: ${GRPC_SRCS}")
-message(VERBOSE "To generate gRPC C++ headers: ${GRPC_HDRS}")
 
 add_executable(AgentClient
         config.h
