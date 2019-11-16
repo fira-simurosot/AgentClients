@@ -23,12 +23,12 @@ jobs:
       run: |
         # gRPC in bionic is too old
         # sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
-        git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
-        cd grpc
-        git submodule update --init
-        pushd third_party/protobuf
-        sudo make install
-        popd
+        git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc &&
+        cd grpc &&
+        git submodule update --init &&
+        pushd third_party/protobuf &&
+        sudo make install &&
+        popd &&
         sudo make install
     - name: Configure
       run: |
