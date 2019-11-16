@@ -25,6 +25,6 @@ jobs:
     - name: Configure
       run: |
         cmake --version
-        cmake -S cpp -B build
+        cmake -Bbuild cpp
     - name: Build
       run: cmake --build build
