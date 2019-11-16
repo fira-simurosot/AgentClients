@@ -12,6 +12,8 @@ jobs:
       
     strategy:
       matrix:
+        os: []
+        cxx-compiler: []
         include:
           - os: ubuntu-18.04
             cxx-compiler: "/usr/bin/g++"
