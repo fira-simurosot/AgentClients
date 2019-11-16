@@ -1,0 +1,27 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-cpp:
+
+    runs-on: ${{ matrix.os }}
+    
+    env:
+      CMAKE_CXX_COMPILER: ${{ matrix.cxx-compiler }}
+      
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            cxx-compiler: "/usr/bin/g++"
+          - os: ubuntu-18.04
+            cxx-compiler: "/usr/bin/clang++"
+          - os: windows-2019
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Configure
+      run: cmake -S cpp -B build
+    - name: Build
+      run: cmake --build build
