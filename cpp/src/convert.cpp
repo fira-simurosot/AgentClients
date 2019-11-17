@@ -94,6 +94,8 @@ cpp_interface::Field
 to_cpp_interface(const fira_message::Frame &frame,
                  fira_message::ref_to_cli::Color self_color) {
     cpp_interface::Field field {
+        .selfRobots = {},
+        .opponentRobots = {},
         .ball = {
                 .position = {
                         .x = static_cast<float>(frame.ball().x()),
