@@ -1,0 +1,32 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-cpp:
+
+    runs-on: ${{ matrix.os }}
+    
+    env:
+      CMAKE_CXX_COMPILER: ${{ matrix.cxx-compiler }}
+      
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        cxx-compiler: ["/usr/bin/clang++-7", "/usr/bin/g++"]
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - name: Install protobuf and gRPC
+      run: |
+        sudo add-apt-repository ppa:webispy/grpc
+        sudo apt-get update
+        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc clang-7
+    - name: Configure
+      run: |
+        cmake --version
+        mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER ../cpp
+    - name: Build
+      run: cmake --build build
