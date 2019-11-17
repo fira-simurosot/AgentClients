@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo add-apt-repository ppa:webispy/grpc
         sudo apt-get update
-        sudo apt-get -y install grpc protobuf
+        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
     - name: Configure
       run: |
         cmake --version
