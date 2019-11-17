@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04]
-        cxx-compiler: ["/usr/bin/clang++", "/usr/bin/g++"]
+        cxx-compiler: ["/usr/bin/clang++-7", "/usr/bin/g++"]
 
     steps:
     - uses: actions/checkout@v1
@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo add-apt-repository ppa:webispy/grpc
         sudo apt-get update
-        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
+        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc clang-7
     - name: Configure
       run: |
         cmake --version
