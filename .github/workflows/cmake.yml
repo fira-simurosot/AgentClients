@@ -21,16 +21,9 @@ jobs:
         submodules: recursive
     - name: Install protobuf and gRPC
       run: |
-        # gRPC in bionic is too old
-        # sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc
-        git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc --recursive &&
-        cd grpc &&
-        pushd third_party/protobuf &&
-        ./autogen.sh &&
-        ./configure
-        sudo make install &&
-        popd &&
-        sudo make install
+        sudo add-apt-repository ppa:webispy/grpc
+        sudo apt-get update
+        sudo apt-get -y install grpc protobuf
     - name: Configure
       run: |
         cmake --version
