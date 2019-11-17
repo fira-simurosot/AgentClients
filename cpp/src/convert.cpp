@@ -2,6 +2,9 @@
 #include <algorithm>
 #include "convert.h"
 
+using google::protobuf::RepeatedFieldBackInserter;
+using google::protobuf::RepeatedPtrField;
+
 cpp_interface::EventType to_cpp_interface(fira_message::ref_to_cli::FoulInfo_PhaseType phase) {
     switch (phase) {
         case fira_message::ref_to_cli::FoulInfo_PhaseType_FirstHalf:
@@ -78,8 +81,8 @@ cpp_interface::Robot to_cpp_interface(const fira_message::Robot &robot) {
     };
 }
 
-static void transform_robots(cpp_interface::Robot *target,
-                             const google::protobuf::RepeatedPtrField<fira_message::Robot> &source) {
+static void transform_robots(cpp_interface::Robot target[],
+                             const RepeatedPtrField<fira_message::Robot> &source) {
     std::vector<fira_message::Robot> self_robot_vec;
     std::copy(source.begin(), source.end(), self_robot_vec.begin());
     std::sort(self_robot_vec.begin(), self_robot_vec.end(),
@@ -119,6 +122,19 @@ to_cpp_interface(const fira_message::Frame &frame,
     }
 
     return field;
+}
+
+fira_message::ref_to_cli::Command from_cpp_interface(const cpp_interface::Field &field) {
+    fira_message::ref_to_cli::Command command;
+    constexpr int player_num = cpp_interface::PLAYERS_PER_SIDE;
+    for (int i = 0; i < player_num; i++) {
+        fira_message::ref_to_cli::WheelSpeed wheel_speed;
+        wheel_speed.set_robot_id(i);
+        wheel_speed.set_left(field.selfRobots[i].wheel.leftSpeed);
+        wheel_speed.set_right(field.selfRobots[i].wheel.rightSpeed);
+        *command.add_wheels() = std::move(wheel_speed);
+    }
+    return command;
 }
 
 

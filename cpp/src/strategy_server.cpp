@@ -30,7 +30,7 @@ StrategyServer::RunStrategy(grpc::ServerContext *context,
     const auto& frame = request->frame();
     auto field = to_cpp_interface(frame, self_color);
     cpp_strategy.get_instruction(&field);
-    // TODO convert back
+    *response = from_cpp_interface(field);
     return grpc::Status::OK;
 }
 
