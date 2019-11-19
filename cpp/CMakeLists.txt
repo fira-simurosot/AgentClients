@@ -25,7 +25,7 @@ file(GLOB_RECURSE PROTO_FILES "FIRAMessage/*.proto")
 #To generate gRPC C++ headers: ${GRPC_HDRS}
 grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_FILES})
 
-option(USE_CLANG_TIDY "Use clang-tidy" ON)
+option(USE_CLANG_TIDY "Use clang-tidy" OFF)
 if(USE_CLANG_TIDY)
     set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 endif()

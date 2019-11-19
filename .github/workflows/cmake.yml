@@ -9,15 +9,10 @@ jobs:
     
     env:
       CMAKE_CXX_COMPILER: ${{ matrix.cxx-compiler }}
-      USE_CLANG_TIDY: ${{ matrix.use-clang-tidy }}
       
     strategy:
       matrix:
         cxx-compiler: ["/usr/bin/clang++-7", "/usr/bin/g++"]
-        use-clang-tidy: ["ON", "OFF"]
-      exclude:
-      - cxx-compiler: "/usr/bin/g++"
-        use-clang-tidy: "ON"
 
     steps:
     - uses: actions/checkout@v1
@@ -27,12 +22,12 @@ jobs:
       run: |
         sudo add-apt-repository ppa:webispy/grpc
         sudo apt-get update
-        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc clang-7 clang-tidy-7
+        sudo apt install -y libgrpc++-dev libprotobuf-dev protobuf-compiler-grpc clang-7
     - name: Configure
       run: |
         cmake --version
         mkdir build
         cd build
-        cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER -DUSE_CLANG_TIDY=$USE_CLANG_TIDY ../cpp
+        cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER ../cpp
     - name: Build
       run: cmake --build build
