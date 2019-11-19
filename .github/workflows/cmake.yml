@@ -15,9 +15,11 @@ jobs:
       matrix:
         cxx-compiler: ["/usr/bin/clang++-7", "/usr/bin/g++"]
         use-clang-tidy: ["ON", "OFF"]
-      exclude:
-      - cxx-compiler: "/usr/bin/g++"
-        use-clang-tidy: "ON"
+        exclude:
+        - cxx-compiler: "/usr/bin/g++"
+          use-clang-tidy: "ON"
+        - cxx-compiler: "/usr/bin/clang++-7"
+          use-clang-tidy: "OFF"
 
     steps:
     - uses: actions/checkout@v1
