@@ -25,10 +25,22 @@ file(GLOB_RECURSE PROTO_FILES "FIRAMessage/*.proto")
 #To generate gRPC C++ headers: ${GRPC_HDRS}
 grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_FILES})
 
-add_executable(AgentClient
-        config.h
+option(USE_CLANG_TIDY "Use clang-tidy" ON)
+if(USE_CLANG_TIDY)
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+endif()
+
+add_library(generated_file OBJECT
         ${GRPC_SRCS}
-        ${GRPC_HDRS}
+        ${GRPC_HDRS})
+target_include_directories(generated_file PRIVATE
+        ${PROJECT_BINARY_DIR})
+set_target_properties(generated_file PROPERTIES
+        CXX_CLANG_TIDY "")
+
+add_executable(AgentClient
+        $<TARGET_OBJECTS:generated_file>
+        config.h
         include/platform.h
         src/main.cpp
         src/cpp_strategy.cpp
@@ -47,6 +59,7 @@ target_link_libraries(AgentClient PRIVATE
         gRPC::grpc++
         ${CMAKE_DL_LIBS})
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL Clang)
-    target_compile_options(AgentClient PRIVATE -Wall)
+    target_compile_options(AgentClient PRIVATE -Wall -Wextra)
 endif()
 target_compile_features(AgentClient PRIVATE cxx_std_17)
+

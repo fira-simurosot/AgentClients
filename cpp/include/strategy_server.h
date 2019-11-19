@@ -34,6 +34,7 @@ class StrategyServer final : public fira_message::ref_to_cli::Referee::Service {
 
     fira_message::ref_to_cli::FoulInfo_PhaseType current_phase;
     fira_message::ref_to_cli::Color self_color;
+    cpp_interface::Ball ball_set;
     CppStrategy cpp_strategy;
 
 public:

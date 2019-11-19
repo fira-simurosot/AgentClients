@@ -1,9 +1,12 @@
-#include <stdexcept>
-#include <algorithm>
 #include "convert.h"
+#include <algorithm>
+#include <stdexcept>
 
-using google::protobuf::RepeatedFieldBackInserter;
 using google::protobuf::RepeatedPtrField;
+
+constexpr int player_num = cpp_interface::PLAYERS_PER_SIDE;
+// should use std::span in C++20
+using array_robots_view = cpp_interface::Robot(&)[player_num];
 
 cpp_interface::EventType to_cpp_interface(fira_message::ref_to_cli::FoulInfo_PhaseType phase) {
     switch (phase) {
@@ -81,7 +84,7 @@ cpp_interface::Robot to_cpp_interface(const fira_message::Robot &robot) {
     };
 }
 
-static void transform_robots(cpp_interface::Robot target[],
+static void transform_robots(array_robots_view target,
                              const RepeatedPtrField<fira_message::Robot> &source) {
     std::vector<fira_message::Robot> self_robot_vec;
     std::copy(source.begin(), source.end(), self_robot_vec.begin());
@@ -89,7 +92,7 @@ static void transform_robots(cpp_interface::Robot target[],
               [](const fira_message::Robot &rhs, const fira_message::Robot &lhs) {
                   return rhs.robot_id() < lhs.robot_id();
               });
-    std::transform(self_robot_vec.begin(), self_robot_vec.end(), target,
+    std::transform(self_robot_vec.begin(), self_robot_vec.end(), std::begin(target),
                    [](const fira_message::Robot &robot) { return to_cpp_interface(robot); });
 }
 
@@ -126,7 +129,6 @@ to_cpp_interface(const fira_message::Frame &frame,
 
 fira_message::ref_to_cli::Command from_cpp_interface(const cpp_interface::Field &field) {
     fira_message::ref_to_cli::Command command;
-    constexpr int player_num = cpp_interface::PLAYERS_PER_SIDE;
     for (int i = 0; i < player_num; i++) {
         fira_message::ref_to_cli::WheelSpeed wheel_speed;
         wheel_speed.set_robot_id(i);

@@ -7,7 +7,7 @@
 int main(int argc, char **argv) {
     CLI::App app(PROJECT_DESCRIPTION);
 
-    auto print_version = [](int64_t count) {
+    auto print_version = [](int64_t /*count*/) {
         std::cout << PROJECT_NAME << " " << PROJECT_VERSION << std::endl;
         std::cout << PROJECT_DESCRIPTION << std::endl;
         std::exit(0);
@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     app.add_option("-s, --strategy", so_name, "Specify the strategy shared object file")
             ->check(CLI::ExistingFile);
 
-    CLI11_PARSE(app, argc, argv);
+    CLI11_PARSE(app, argc, argv)
 
     run_strategy_server("0.0.0.0:50051", so_name);
 }

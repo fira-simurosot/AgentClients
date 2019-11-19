@@ -1,0 +1,3 @@
+---
+Checks: '*,-modernize-use-trailing-return-type,-fuchsia-*,-misc-unused-parameters,-google-runtime-references'
+...

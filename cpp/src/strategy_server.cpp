@@ -1,7 +1,7 @@
-#include <memory>
-#include <grpcpp/grpcpp.h>
-#include "convert.h"
 #include "strategy_server.h"
+#include "convert.h"
+#include <grpcpp/grpcpp.h>
+#include <memory>
 
 using fira_message::ref_to_cli::Environment;
 using fira_message::ref_to_cli::Command;
@@ -11,20 +11,20 @@ using fira_message::ref_to_cli::FoulInfo_PhaseType;
 using fira_message::Ball;
 
 grpc::Status
-StrategyServer::Register(grpc::ServerContext *context,
+StrategyServer::Register(grpc::ServerContext * /*context*/,
                          const fira_message::ref_to_cli::TeamInfo *request,
                          fira_message::ref_to_cli::TeamName *response) {
     self_color = request->color();
 
     cpp_interface::TeamInfo team_info{};
     cpp_strategy.get_team_info(&team_info);
-    response->set_name(team_info.teamName);
+    response->set_name(static_cast<const char*>(team_info.teamName));
 
     return grpc::Status::OK;
 }
 
 grpc::Status
-StrategyServer::RunStrategy(grpc::ServerContext *context,
+StrategyServer::RunStrategy(grpc::ServerContext* /*context*/,
                             const Environment *request,
                             Command *response) {
     const auto& frame = request->frame();
@@ -35,24 +35,28 @@ StrategyServer::RunStrategy(grpc::ServerContext *context,
 }
 
 grpc::Status
-StrategyServer::SetBall(grpc::ServerContext *context,
+StrategyServer::SetBall(grpc::ServerContext* /*context*/,
                         const Environment *request,
                         Ball *response) {
+    response->set_x(ball_set.position.x);
+    response->set_y(ball_set.position.y);
     return grpc::Status::OK;
 }
 
 grpc::Status
-StrategyServer::SetFormerRobots(grpc::ServerContext *context,
+StrategyServer::SetFormerRobots(grpc::ServerContext* /*context*/,
                                 const Environment *request,
                                 Robots *response) {
     const auto &foul_info = request->foulinfo();
     notify_phase_change(foul_info.phase());
     notify_judge_result(foul_info);
+    auto field = to_cpp_interface(request->frame(), self_color);
+    cpp_strategy.get_placement(&field);
     return grpc::Status::OK;
 }
 
 grpc::Status
-StrategyServer::SetLaterRobots(grpc::ServerContext *context,
+StrategyServer::SetLaterRobots(grpc::ServerContext* /*context*/,
                                const Environment *request,
                                Robots *response) {
     const auto &foul_info = request->foulinfo();
@@ -63,6 +67,8 @@ StrategyServer::SetLaterRobots(grpc::ServerContext *context,
 
 StrategyServer::StrategyServer(const std::string &so_name)
         : current_phase(FoulInfo_PhaseType::FoulInfo_PhaseType_Stopped),
+          self_color(),
+          ball_set(),
           cpp_strategy(so_name) {
 }
 
