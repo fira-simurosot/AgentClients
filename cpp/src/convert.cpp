@@ -127,16 +127,27 @@ to_cpp_interface(const fira_message::Frame &frame,
     return field;
 }
 
-fira_message::ref_to_cli::Command from_cpp_interface(const cpp_interface::Field &field) {
+fira_message::ref_to_cli::Command convert_field_to_command(const cpp_interface::Field &field) {
     fira_message::ref_to_cli::Command command;
-    for (int i = 0; i < player_num; i++) {
-        fira_message::ref_to_cli::WheelSpeed wheel_speed;
-        wheel_speed.set_robot_id(i);
-        wheel_speed.set_left(field.selfRobots[i].wheel.leftSpeed);
-        wheel_speed.set_right(field.selfRobots[i].wheel.rightSpeed);
-        *command.add_wheels() = std::move(wheel_speed);
+    for (int i = 0; i < player_num; ++i) {
+        auto wheel_speed = command.add_wheels();
+        wheel_speed->set_robot_id(i);
+        wheel_speed->set_left(field.selfRobots[i].wheel.leftSpeed);
+        wheel_speed->set_right(field.selfRobots[i].wheel.rightSpeed);
     }
     return command;
+}
+
+fira_message::ref_to_cli::Robots convert_field_to_robots(const cpp_interface::Field &field) {
+    fira_message::ref_to_cli::Robots robots;
+    for (int i = 0; i < player_num; ++i) {
+        auto robot = robots.add_robots();
+        robot->set_robot_id(i);
+        robot->set_x(field.selfRobots[i].position.x);
+        robot->set_y(field.selfRobots[i].position.y);
+        robot->set_orientation(field.selfRobots[i].rotation);
+    }
+    return robots;
 }
 
 
