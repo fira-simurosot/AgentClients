@@ -30,16 +30,22 @@ if(USE_CLANG_TIDY)
     set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 endif()
 
-add_library(generated_file OBJECT
+add_library(generated_proto
         ${GRPC_SRCS}
         ${GRPC_HDRS})
-target_include_directories(generated_file PRIVATE
-        ${PROJECT_BINARY_DIR})
-set_target_properties(generated_file PROPERTIES
+target_include_directories(generated_proto SYSTEM PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${GRPC_INCLUDE_DIRS})
+set_target_properties(generated_proto PROPERTIES
         CXX_CLANG_TIDY "")
+if(WIN32)
+    target_compile_definitions(generated_proto PUBLIC
+            "-D_WIN32_WINNT=0x0A00")
+    target_compile_options(generated_proto PRIVATE
+            "/W0")
+endif()
 
 add_executable(AgentClient
-        $<TARGET_OBJECTS:generated_file>
         config.h
         include/platform.h
         src/main.cpp
@@ -51,9 +57,9 @@ add_executable(AgentClient
         include/convert.h)
 
 target_include_directories(AgentClient PRIVATE
-        include
-        ${PROJECT_BINARY_DIR})
+        include)
 target_link_libraries(AgentClient PRIVATE
+        generated_proto
         CLI11::CLI11
         protobuf::libprotobuf
         gRPC::grpc++
