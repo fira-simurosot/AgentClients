@@ -1,7 +1,9 @@
 #include "cpp_strategy.h"
-#include <dlfcn.h>
 #include <string>
 #include <system_error>
+
+#ifdef __linux__
+#include <dlfcn.h>
 
 template <typename T>
 static T dlsym_wrapper(void *handle, const char *name) {
@@ -26,4 +28,11 @@ CppStrategy::CppStrategy(const std::string& so_name)
     get_placement = dlsym_wrapper<GetPlacement>(handle.get(), "GetPlacement");
     get_team_info = dlsym_wrapper<GetTeamInfo>(handle.get(), "GetTeamInfo");
 }
+#endif
 
+#ifdef _WIN32
+#include <windows.h>
+CppStrategy::CppStrategy(const std::string& so_name)
+        : handle(nullptr, close_fn) {
+}
+#endif

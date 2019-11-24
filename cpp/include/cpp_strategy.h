@@ -2,12 +2,23 @@
 
 #include <string>
 #include <memory>
-#include <dlfcn.h>
+
+#ifdef __linux__
+    #include <dlfcn.h>
+#endif
+#ifdef _WIN32
+#endif
+
 #include "platform.h"
 
 class CppStrategy {
     // use std::unique_ptr to store handle in order to make CppStrategy move-only
+#ifdef __linux__
     static constexpr auto close_fn = [](void *handle) { dlclose(handle); };
+#endif
+#ifdef _WIN32
+    static constexpr auto close_fn = [](void *handle) { };
+#endif
     std::unique_ptr<void, decltype(close_fn)> handle;
 
     using OnEvent = void (*)(cpp_interface::EventType type, void *argument);
