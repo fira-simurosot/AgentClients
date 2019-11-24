@@ -30,6 +30,11 @@ if(USE_CLANG_TIDY)
     set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 endif()
 
+if (MSVC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.14)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /experimental:external /external:W0 ")
+    set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "/external:I ")
+endif()
+
 add_library(generated_proto
         ${GRPC_SRCS}
         ${GRPC_HDRS})
@@ -41,6 +46,8 @@ set_target_properties(generated_proto PROPERTIES
 if(WIN32)
     target_compile_definitions(generated_proto PUBLIC
             "-D_WIN32_WINNT=0x0A00")
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(generated_proto PRIVATE
             "/W0")
 endif()
@@ -64,7 +71,7 @@ target_link_libraries(AgentClient PRIVATE
         protobuf::libprotobuf
         gRPC::grpc++
         ${CMAKE_DL_LIBS})
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL Clang)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(AgentClient PRIVATE -Wall -Wextra)
 endif()
 target_compile_features(AgentClient PRIVATE cxx_std_17)
