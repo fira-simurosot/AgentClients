@@ -31,8 +31,26 @@ CppStrategy::CppStrategy(const std::string& so_name)
 #endif
 
 #ifdef _WIN32
-#include <windows.h>
+#include <Windows.h>
+
+template <typename T>
+static T dlsym_wrapper(void *handle, const char *name) {
+    auto sym = (T) GetProcAddress(static_cast<HINSTANCE>(handle), name);
+    if (!sym) {
+        throw std::system_error(GetLastError(), std::system_category(), "Error loading function");
+    }
+    return sym;
+}
+
 CppStrategy::CppStrategy(const std::string& so_name)
-        : handle(nullptr, close_fn) {
+        : handle(LoadLibrary(so_name.c_str()), close_fn) {
+    if (!handle) {
+        throw std::system_error(GetLastError(), std::system_category(), "Error loading library");
+    }
+
+    on_event = dlsym_wrapper<OnEvent>(handle.get(), "OnEvent");
+    get_instruction = dlsym_wrapper<GetInstruction>(handle.get(), "GetInstruction");
+    get_placement = dlsym_wrapper<GetPlacement>(handle.get(), "GetPlacement");
+    get_team_info = dlsym_wrapper<GetTeamInfo>(handle.get(), "GetTeamInfo");
 }
 #endif
