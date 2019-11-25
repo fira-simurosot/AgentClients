@@ -7,6 +7,7 @@
     #include <dlfcn.h>
 #endif
 #ifdef _WIN32
+    #include <Windows.h>
 #endif
 
 #include "platform.h"
@@ -17,7 +18,7 @@ class CppStrategy {
     static constexpr auto close_fn = [](void *handle) { dlclose(handle); };
 #endif
 #ifdef _WIN32
-    static constexpr auto close_fn = [](void *handle) { };
+    static constexpr auto close_fn = [](void *handle) { FreeLibrary(static_cast<HINSTANCE>(handle)); };
 #endif
     std::unique_ptr<void, decltype(close_fn)> handle;
 

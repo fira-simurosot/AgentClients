@@ -14,7 +14,7 @@ if(WIN32)
     # Needed only on windows
     find_package(ZLIB REQUIRED)
     find_package(c-ares REQUIRED)
-    find_library(WINSOCK_LIB ws2_32)
+    find_library(WINSOCK_LIB WS2_32)
     find_library(ADDRESS_SORTING_LIB address_sorting)
 endif()
 

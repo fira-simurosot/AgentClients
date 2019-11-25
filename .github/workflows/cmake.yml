@@ -31,3 +31,33 @@ jobs:
         cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER ../cpp
     - name: Build
       run: cmake --build build
+
+  build-cpp-windows:
+    runs-on: windows-2019
+    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - name: Fast Fail
+      run: |
+        cmake -B build
+        Fail
+    - name: Install protobuf and gRPC
+      run: |
+        vcpkg install protobuf:x64-windows
+        vcpkg install grpc:x64-windows
+    - name: Fix symlink
+      run: |
+        Remove-Item cpp/FIRAMessage
+        New-Item cpp/FIRAMessage -Value FIRAMessage -Type Junction
+    - name: Configure
+      run: |
+        mkdir build
+        cd build
+        $vcpkgdir=[System.IO.Path]::GetDirectoryName((Get-Command vcpkg).Source)
+        echo $vcpkgdir
+        cmake --version
+        cmake -D CMAKE_TOOLCHAIN_FILE=${vcpkgdir}\scripts\buildsystems\vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-windows ../cpp
+    - name: Build
+      run: cmake --build build

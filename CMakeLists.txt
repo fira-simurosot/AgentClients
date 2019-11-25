@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+project(Test LANGUAGES CXX)
+find_library(WINSOCK_LIB WS2_32 PATH "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.18362.0\\um\\x64")
+if(NOT WINSOCK_LIB)
+    message(FATAL_ERROR "Cannot find WS2_32 library")
+endif()
+message(STATUS "Found WS2_32")
