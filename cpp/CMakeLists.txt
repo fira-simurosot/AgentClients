@@ -14,7 +14,7 @@ if(WIN32)
     # Needed only on windows
     find_package(ZLIB REQUIRED)
     find_package(c-ares REQUIRED)
-    find_library(WINSOCK_LIB WS2_32)
+    find_package(WS2_32 REQUIRED)
     find_library(ADDRESS_SORTING_LIB address_sorting)
 endif()
 
@@ -86,7 +86,7 @@ if(WIN32)
     target_link_libraries(AgentClient PRIVATE
             ZLIB::ZLIB
             c-ares::cares
-            ${WINSOCK_LIB}
+            WS2_32::WS2_32
             ${ADDRESS_SORTING_LIB})
 endif()
 
