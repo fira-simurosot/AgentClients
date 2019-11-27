@@ -19,7 +19,7 @@ if(WIN32)
 endif()
 
 # Add command option parser
-add_subdirectory(CLI11)
+add_subdirectory(third_party/CLI11)
 
 # Generate config file
 configure_file(

@@ -2,5 +2,5 @@
 	path = FIRAMessage
 	url = https://github.com/fira-simurosot/FIRAMessage.git
 [submodule "cpp/CLI11"]
-	path = cpp/CLI11
+	path = cpp/third_party/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
