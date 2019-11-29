@@ -17,7 +17,13 @@ static T dlsym_wrapper(void *handle, const char *name) {
 }
 
 CppStrategy::CppStrategy(const std::string& so_name)
-        : handle(dlopen(so_name.c_str(), RTLD_LAZY), close_fn) {
+        : handle(nullptr, close_fn) {
+    // if so_name is empty, will load this program itself
+    if (so_name.empty()) {
+        throw std::invalid_argument("name of so can't be empty");
+    }
+
+    handle.reset(dlopen(so_name.c_str(), RTLD_LAZY));
 
     if (!handle) {
         throw std::system_error(std::error_code(), dlerror());
