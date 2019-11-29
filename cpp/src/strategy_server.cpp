@@ -3,6 +3,14 @@
 #include <grpcpp/grpcpp.h>
 #include <memory>
 
+#if __has_include(<filesystem>)
+#  include <filesystem>
+namespace fs = std::filesystem;
+#else
+#  include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#endif
+
 using fira_message::ref_to_cli::Environment;
 using fira_message::ref_to_cli::Command;
 using fira_message::ref_to_cli::Robots;
@@ -69,7 +77,7 @@ StrategyServer::StrategyServer(const std::string &so_name)
         : current_phase(FoulInfo_PhaseType::FoulInfo_PhaseType_Stopped),
           self_color(),
           ball_set(),
-          cpp_strategy(so_name) {
+          cpp_strategy(fs::canonical(fs::path(so_name))) {
 }
 
 void StrategyServer::notify_phase_change(const FoulInfo_PhaseType& phase) {
