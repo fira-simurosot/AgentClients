@@ -90,9 +90,15 @@ if(WIN32)
             ${ADDRESS_SORTING_LIB})
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND
+        CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    target_link_libraries(AgentClient PRIVATE stdc++fs)
+endif()
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(AgentClient PRIVATE -Wall -Wextra)
 endif()
+
 target_compile_features(AgentClient PRIVATE cxx_std_17)
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Use C++20 in MSVC for designated initializers
