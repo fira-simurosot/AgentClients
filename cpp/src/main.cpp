@@ -17,13 +17,16 @@ int main(int argc, char **argv) {
         app.add_flag("-V, --version", print_version, "Print version information");
 
         std::string so_name;
+        std::string port;
         app.add_option("-s, --strategy", so_name, "Specify the strategy shared object file")
                 ->required()
                 ->check(CLI::ExistingFile);
+        app.add_option("-p, --port", port, "Specify the port number")
+                ->default_val("50051");
 
         CLI11_PARSE(app, argc, argv)
 
-        run_strategy_server("0.0.0.0:50051", so_name);
+        run_strategy_server("0.0.0.0:" + port, so_name);
 
     } catch (const std::invalid_argument &ex) {
         std::cerr << "Fatal error: invalid argument: " << ex.what() << std::endl;
