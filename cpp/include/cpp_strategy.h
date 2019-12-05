@@ -3,24 +3,12 @@
 #include <string>
 #include <memory>
 
-#ifdef __linux__
-    #include <dlfcn.h>
-#endif
-#ifdef _WIN32
-    #include <Windows.h>
-#endif
-
 #include "platform.h"
 
 class CppStrategy {
     // use std::unique_ptr to store handle in order to make CppStrategy move-only
-#ifdef __linux__
-    static constexpr auto close_fn = [](void *handle) { dlclose(handle); };
-#endif
-#ifdef _WIN32
-    static constexpr auto close_fn = [](void *handle) { FreeLibrary(static_cast<HINSTANCE>(handle)); };
-#endif
-    std::unique_ptr<void, decltype(close_fn)> handle;
+    static void close_fn(void *handle);
+    std::unique_ptr<void, decltype(&close_fn)> handle = {nullptr, close_fn};
 
     using OnEvent = void (*)(cpp_interface::EventType type, void *argument);
     using GetTeamInfo = void (*)(cpp_interface::TeamInfo *teamInfo);

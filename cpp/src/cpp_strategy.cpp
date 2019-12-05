@@ -16,8 +16,11 @@ static T dlsym_wrapper(void *handle, const char *name) {
     return sym;
 }
 
-CppStrategy::CppStrategy(const std::string& so_name)
-        : handle(nullptr, close_fn) {
+void CppStrategy::close_fn(void *handle) {
+    dlclose(handle);
+}
+
+CppStrategy::CppStrategy(const std::string& so_name) {
     // if so_name is empty, will load this program itself
     if (so_name.empty()) {
         throw std::invalid_argument("name of so can't be empty");
@@ -48,8 +51,13 @@ static T dlsym_wrapper(void *handle, const char *name) {
     return sym;
 }
 
-CppStrategy::CppStrategy(const std::string& so_name)
-        : handle(LoadLibrary(so_name.c_str()), close_fn) {
+void CppStrategy::close_fn(void *handle) {
+    FreeLibrary(static_cast<HINSTANCE>(handle));
+}
+
+CppStrategy::CppStrategy(const std::string& so_name) {
+    handle.reset(LoadLibrary(so_name.c_str())) {
+
     if (!handle) {
         throw std::system_error(GetLastError(), std::system_category(), "Error loading library");
     }
