@@ -56,7 +56,7 @@ void CppStrategy::close_fn(void *handle) {
 }
 
 CppStrategy::CppStrategy(const std::string& so_name) {
-    handle.reset(LoadLibrary(so_name.c_str())) {
+    handle.reset(LoadLibrary(so_name.c_str()));
 
     if (!handle) {
         throw std::system_error(GetLastError(), std::system_category(), "Error loading library");
