@@ -87,7 +87,7 @@ cpp_interface::Robot to_cpp_interface(const fira_message::Robot &robot) {
 static void transform_robots(array_robots_view target,
                              const RepeatedPtrField<fira_message::Robot> &source) {
     std::vector<fira_message::Robot> self_robot_vec;
-    std::copy(source.begin(), source.end(), self_robot_vec.begin());
+    std::copy(source.begin(), source.end(), std::back_inserter(self_robot_vec));
     std::sort(self_robot_vec.begin(), self_robot_vec.end(),
               [](const fira_message::Robot &rhs, const fira_message::Robot &lhs) {
                   return rhs.robot_id() < lhs.robot_id();
