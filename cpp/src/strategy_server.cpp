@@ -73,7 +73,7 @@ StrategyServer::SetLaterRobots(grpc::ServerContext *context,
     return SetFormerRobots(context, request, response);
 }
 
-StrategyServer::StrategyServer(const std::string &so_name)
+StrategyServer::StrategyServer(const std::string_view so_name)
         : current_phase(FoulInfo_PhaseType::FoulInfo_PhaseType_Stopped),
           self_color(),
           ball_set(),

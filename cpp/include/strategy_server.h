@@ -38,7 +38,7 @@ class StrategyServer final : public fira_message::ref_to_cli::Referee::Service {
     CppStrategy cpp_strategy;
 
 public:
-    explicit StrategyServer(const std::string &so_name);
+    explicit StrategyServer(const std::string_view so_name);
 };
 
 void run_strategy_server(const std::string &addr, const std::string &so_name);
