@@ -73,11 +73,12 @@ StrategyServer::SetLaterRobots(grpc::ServerContext *context,
     return SetFormerRobots(context, request, response);
 }
 
-StrategyServer::StrategyServer(const std::string_view so_name)
+StrategyServer::StrategyServer(std::string_view so_name)
         : current_phase(FoulInfo_PhaseType::FoulInfo_PhaseType_Stopped),
           self_color(),
           ball_set(),
           cpp_strategy(fs::canonical(fs::path(so_name)).string()) {
+
 }
 
 void StrategyServer::notify_phase_change(const FoulInfo_PhaseType& phase) {
