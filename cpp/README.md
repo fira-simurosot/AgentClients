@@ -9,7 +9,16 @@ Tested with CMake 3.10 with following compilers:
 - MSVC latest (Visual Studio 2019)
 
 
-## Installation of GRPC for Linux
+## Installation
+
+### Clone Sub Modules
+```bash
+git submodule update --recursive --init 
+```
+
+### Installation of GRPC 
+
+#### Linux
 ```bash
 sudo add-apt-repository ppa:webispy/grpc
 sudo apt-get update
