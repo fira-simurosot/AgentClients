@@ -1,20 +1,16 @@
 import subprocess
 subprocess.call("./protoCompiler.bash", shell=True)
+import sys
+sys.path.insert(1, './messages')
 
 import grpc
 from concurrent import futures
-import time
 import handyWidget
+from handyWidget import wheelspeedsLeft, wheelspeedsRight
 from REF2CLI import service_pb2_grpc
 from REF2CLI import messages_pb2
 import common_pb2
-import sys
 from PyQt5.QtWidgets import (QWidget, QGridLayout,QPushButton, QApplication, QLabel, QComboBox)
-
-
-
-wheelspeedsLeft = [0, 0, 0, 0, 0]
-wheelspeedsRight = [0, 0, 0, 0, 0]
 
 
 class RefereeServicer(service_pb2_grpc.RefereeServicer):

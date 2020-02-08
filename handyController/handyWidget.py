@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QGridLayout,QPushButton, QApplication, QLabel, QComboBox)
 
-
+wheelspeedsLeft = [0, 0, 1, 0, 0]
+wheelspeedsRight = [0, 0, 1, 0, 0]
 
 
 class HandyWidget(QWidget):

@@ -1,6 +1,4 @@
 .idea
 cmake-build-debug
 handyController/env
-handyController/common_pb2.py
-handyController/REF2CLI
-handyController/__pycache__
+handyController/messages
