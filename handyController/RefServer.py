@@ -4,13 +4,17 @@ subprocess.call("./protoCompiler.bash", shell=True)
 import grpc
 from concurrent import futures
 import time
+import handyWidget
 from REF2CLI import service_pb2_grpc
 from REF2CLI import messages_pb2
 import common_pb2
+import sys
+from PyQt5.QtWidgets import (QWidget, QGridLayout,QPushButton, QApplication, QLabel, QComboBox)
 
 
 
-
+wheelspeedsLeft = [0, 0, 0, 0, 0]
+wheelspeedsRight = [0, 0, 0, 0, 0]
 
 
 class RefereeServicer(service_pb2_grpc.RefereeServicer):
@@ -28,8 +32,8 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
         for i in range(5):
             wheelspeed = command.wheels.add()
             wheelspeed.robot_id = i
-            wheelspeed.right = 0
-            wheelspeed.left = 0
+            wheelspeed.right = wheelspeedsRight[i]
+            wheelspeed.left = wheelspeedsLeft[i]
         return command
 
     def SetBall(self, request, context):
@@ -62,7 +66,8 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
             myrobot.orientation = 0
         return robot
 
-
+def up_clicked():
+    print("up")
 
 
 
@@ -72,5 +77,8 @@ service_pb2_grpc.add_RefereeServicer_to_server(RefereeServicer(),server)
 server.add_insecure_port('127.0.0.1:50052')
 server.start()
 
-while True:
-    time.sleep(85000)
+app = QApplication(sys.argv)
+myWidget = handyWidget.HandyWidget()
+myWidget.pbup.clicked.connect(up_clicked)
+sys.exit(app.exec_())
+
