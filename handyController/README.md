@@ -1,10 +1,13 @@
 # Handy Controller
 
-![HandyController on mac](resources/screenshot.png?raw=true "HandyController on mac")
-
+<p align="center">
+<img src="https://github.com/fira-simurosot/AgentClients/raw/handyController/handyController/resources/screenshot.png" alt="HandyController"
+title="HandyController" width="200" align="middle" />
+</p>
 ## Usage
------
+
 Handy Controller is a simple client written with python, it has a simple interface that allows you to send simple commands to FIRASim.
+
 
 ## Installation
 
