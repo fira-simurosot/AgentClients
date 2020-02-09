@@ -4,6 +4,7 @@ import sys
 sys.path.insert(1, './messages')
 
 import grpc
+import time
 from concurrent import futures
 import handyWidget
 from handyWidget import wheelspeedsLeft, wheelspeedsRight
@@ -62,9 +63,6 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
             myrobot.orientation = 0
         return robot
 
-def up_clicked():
-    print("up")
-
 
 
 
@@ -73,8 +71,23 @@ service_pb2_grpc.add_RefereeServicer_to_server(RefereeServicer(),server)
 server.add_insecure_port('127.0.0.1:50052')
 server.start()
 
+
+def color_changed(index):
+    port = '50052'
+    if index == 1:
+        port = '50053'
+    global server
+    server.stop(0)
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    service_pb2_grpc.add_RefereeServicer_to_server(RefereeServicer(), server)
+    server.add_insecure_port('127.0.0.1:'+port)
+    server.start()
+
+
+# while True:
+#     time.sleep(5000)
 app = QApplication(sys.argv)
 myWidget = handyWidget.HandyWidget()
-myWidget.pbup.clicked.connect(up_clicked)
+myWidget.combocolor.currentIndexChanged.connect(color_changed)
 sys.exit(app.exec_())
 
