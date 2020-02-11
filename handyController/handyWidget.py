@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QGridLayout,QPushButton, QApplication, QLabel, QComboBox, QLineEdit)
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 
 wheelspeedsLeft = [0, 0, 0, 0, 0]
 wheelspeedsRight = [0, 0, 0, 0, 0]
@@ -71,7 +72,29 @@ class HandyWidget(QWidget):
         grid.addWidget(self.spacerupright, 4, 4, 1, 1)
         self.show()
         self.connections()
+        self.spacerdownleft.setFocus()
 
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.spacerdownleft.setFocus()
+        elif e.key() == Qt.Key_Up or e.key() == Qt.Key_W:
+            self.pbup_pressed()
+        elif e.key() == Qt.Key_Down or e.key() == Qt.Key_S:
+            self.pbdown_pressed()
+        elif e.key() == Qt.Key_E:
+            self.pbcw_pressed()
+        elif e.key() == Qt.Key_Q:
+            self.pbccw_pressed()
+
+    def keyReleaseEvent(self, e):
+        if e.key() == Qt.Key_Up or e.key() == Qt.Key_W:
+            self.pb_released()
+        elif e.key() == Qt.Key_Down or e.key() == Qt.Key_S:
+            self.pb_released()
+        elif e.key() == Qt.Key_E:
+            self.pb_released()
+        elif e.key() == Qt.Key_Q:
+            self.pb_released()
 
     def connections(self):
         self.pbleft.pressed.connect(self.pbleft_pressed)

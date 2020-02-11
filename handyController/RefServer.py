@@ -20,11 +20,10 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
         print("Register")
         response = messages_pb2.TeamName()
         response.name = "parsian"
-        print('salam')
         return response
 
     def RunStrategy(self, request, context):
-        print('RunStrategy')
+        # print('RunStrategy')
         command = messages_pb2.Command()
         for i in range(5):
             wheelspeed = command.wheels.add()
@@ -65,7 +64,7 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
 
 
 
-
+print('Handy controller is running')
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 service_pb2_grpc.add_RefereeServicer_to_server(RefereeServicer(),server)
 server.add_insecure_port('127.0.0.1:50052')
