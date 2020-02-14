@@ -1,7 +1,7 @@
 # Handy Controller
 
 <p align="center">
-<img src="https://github.com/fira-simurosot/AgentClients/raw/handyController/handyController/resources/screenshot.png" alt="HandyController"
+<img src="resources/screenshot.png" alt="HandyController"
 title="HandyController" width="200" align="middle" />
 </p>
 
