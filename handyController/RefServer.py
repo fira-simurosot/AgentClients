@@ -79,7 +79,7 @@ def color_changed(index):
     server.stop(0)
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service_pb2_grpc.add_RefereeServicer_to_server(RefereeServicer(), server)
-    server.add_insecure_port('127.0.0.1:'+port)
+    server.add_insecure_port('127.0.0.1:'+ port)
     server.start()
 
 
