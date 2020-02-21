@@ -5,6 +5,7 @@ sys.path.insert(1, '../protoCompiled')
 from enum import Enum
 from src.geom import Vector2D
 from protoCompiled import common_pb2
+from protoCompiled.REF2CLI import messages_pb2
 
 
 ROBOTS_NUM = 5
@@ -59,6 +60,70 @@ class WorldModel:
 
         if our_color == ColorEnum.Blue:
             self.our, self.opp = self.opp, self.our
+
+class GameStateEnum(Enum):
+    PlayOn = 1
+    OurPlaceKick = 2
+    OurPenaltyKick = 3
+    OurFreeKick = 4
+    OurGoalKick = 5
+    OurFreeBallLeftTop = 6
+    OurFreeBallRightTop = 7
+    OurFreeBallLeftBot = 8
+    OurFreeBallRightBot = 9
+
+    TheirPlaceKick = 2
+    TheirPenaltyKick = 3
+    TheirFreeKick = 4
+    TheirGoalKick = 5
+    TheirFreeBallLeftTop = 6
+    TheirFreeBallRightTop = 7
+    TheirFreeBallLeftBot = 8
+    TheirFreeBallRightBot = 9
+
+
+class GamePhaseEnum(Enum):
+    FirstHalf = 1
+    SecondHalf = 2
+    PenaltyShootout = 3
+
+
+class GameState:
+    def __init__(self):
+        self.state = GameStateEnum.PlayOn
+        self.phase = GamePhaseEnum.FirstHalf
+
+    def update_gamestate(self, foul_info):
+        dict_state = {}
+        dict_phase = {}
+        if foul_info.actor == messages_pb2.Side.Self:
+            dict_state = {messages_pb2.FoulInfo.FoulType.PlayOn             :   GameStateEnum.PlayOn,
+                          messages_pb2.FoulInfo.FoulType.PlaceKick          :   GameStateEnum.OurPlaceKick,
+                          messages_pb2.FoulInfo.FoulType.PenaltyKick        :   GameStateEnum.OurPenaltyKick,
+                          messages_pb2.FoulInfo.FoulType.FreeKick           :   GameStateEnum.OurFreeKick,
+                          messages_pb2.FoulInfo.FoulType.GoalKick           :   GameStateEnum.OurGoalKick,
+                          messages_pb2.FoulInfo.FoulType.FreeBallLeftTop    :   GameStateEnum.OurFreeBallLeftTop,
+                          messages_pb2.FoulInfo.FoulType.FreeBallRightTop   :   GameStateEnum.OurFreeBallRightTop,
+                          messages_pb2.FoulInfo.FoulType.FreeBallLeftBot    :   GameStateEnum.OurFreeBallLeftBot,
+                          messages_pb2.FoulInfo.FoulType.FreeBallRightBot   :   GameStateEnum.OurFreeBallRightBot
+                          }
+        else:
+            dict_state = {messages_pb2.FoulInfo.FoulType.PlayOn             :   GameStateEnum.PlayOn,
+                          messages_pb2.FoulInfo.FoulType.PlaceKick          :   GameStateEnum.TheirPlaceKick,
+                          messages_pb2.FoulInfo.FoulType.PenaltyKick        :   GameStateEnum.TheirPenaltyKick,
+                          messages_pb2.FoulInfo.FoulType.FreeKick           :   GameStateEnum.TheirFreeKick,
+                          messages_pb2.FoulInfo.FoulType.GoalKick           :   GameStateEnum.TheirGoalKick,
+                          messages_pb2.FoulInfo.FoulType.FreeBallLeftTop    :   GameStateEnum.TheirFreeBallLeftTop,
+                          messages_pb2.FoulInfo.FoulType.FreeBallRightTop   :   GameStateEnum.TheirFreeBallRightTop,
+                          messages_pb2.FoulInfo.FoulType.FreeBallLeftBot    :   GameStateEnum.TheirFreeBallLeftBot,
+                          messages_pb2.FoulInfo.FoulType.FreeBallRightBot   :   GameStateEnum.TheirFreeBallRightBot
+                          }
+            dict_phase = {messages_pb2.FoulInfo.PhaseType.FirstHalf         :   GamePhaseEnum.FirstHalf,
+                          messages_pb2.FoulInfo.PhaseType.SecondHalf        :   GamePhaseEnum.SecondHalf,
+                          messages_pb2.FoulInfo.PhaseType.PenaltyShootout   :   GamePhaseEnum.PenaltyShootout
+            }
+            self.state = dict_state[foul_info.type]
+            self.phase = dict_phase[foul_info.phase]
 
 
 if __name__ == "__main__":
