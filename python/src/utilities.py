@@ -47,7 +47,7 @@ class WorldModel:
         for i in range(ROBOTS_NUM):
             self.our[i].id = frame.robots_yellow[i].robot_id
             self.our[i].pos = Vector2D(frame.robots_yellow[i].x, frame.robots_yellow[i].y)
-            self.our[i].vel = Vector2D(frame.robots_yellow[i].x - lastframe.robots_yellow[i].x, frame.robots_yellow[i].y - last_frame.robots_yellow[i].y)
+            self.our[i].vel = Vector2D(frame.robots_yellow[i].x - last_frame.robots_yellow[i].x, frame.robots_yellow[i].y - last_frame.robots_yellow[i].y)
             self.our[i].ang = frame.robots_yellow[i].orientation
             self.our[i].angVel = frame.robots_yellow[i].orientation - last_frame.robots_yellow[i].orientation
 
@@ -72,14 +72,14 @@ class GameStateEnum(Enum):
     OurFreeBallLeftBot = 8
     OurFreeBallRightBot = 9
 
-    TheirPlaceKick = 2
-    TheirPenaltyKick = 3
-    TheirFreeKick = 4
-    TheirGoalKick = 5
-    TheirFreeBallLeftTop = 6
-    TheirFreeBallRightTop = 7
-    TheirFreeBallLeftBot = 8
-    TheirFreeBallRightBot = 9
+    TheirPlaceKick = 10
+    TheirPenaltyKick = 11
+    TheirFreeKick = 12
+    TheirGoalKick = 13
+    TheirFreeBallLeftTop = 14
+    TheirFreeBallRightTop = 15
+    TheirFreeBallLeftBot = 16
+    TheirFreeBallRightBot = 17
 
 
 class GamePhaseEnum(Enum):
@@ -122,33 +122,40 @@ class GameState:
                         }
 
     def update_gamestate(self, foul_info):
-        dict_state = {}
         if foul_info.actor == messages_pb2.Side.Self:
-            dict_state = self.dict_state_our
+            self.state = self.dict_state_our[foul_info.type]
         else:
-            dict_state = self.dict_state_their
+            self.state = self.dict_state_their[foul_info.type]
 
-            self.state = dict_state[foul_info.type]
-            self.phase = self.dict_phase[foul_info.phase]
+        self.phase = self.dict_phase[foul_info.phase]
 
 
 if __name__ == "__main__":
-    wm = WorldModel()
-    frame = common_pb2.Frame()
-    lastframe = common_pb2.Frame()
-    for i in range(ROBOTS_NUM):
-        tmp = frame.robots_yellow.add()
-        tmp.robot_id = i
-        tmp.x = i
-        tmp.y = i
-        tmp.orientation = i
-        tmp1 = frame.robots_blue.add()
-        tmp1.robot_id = 10 - i
-        tmp1.x = 10 - i
-        tmp1.y = 10 - i
-        tmp1.orientation = 10 - i
-    lastframe = frame
+    # wm = WorldModel()
+    # frame = common_pb2.Frame()
+    # lastframe = common_pb2.Frame()
+    # for i in range(ROBOTS_NUM):
+    #     tmp = frame.robots_yellow.add()
+    #     tmp.robot_id = i
+    #     tmp.x = i
+    #     tmp.y = i
+    #     tmp.orientation = i
+    #     tmp1 = frame.robots_blue.add()
+    #     tmp1.robot_id = 10 - i
+    #     tmp1.x = 10 - i
+    #     tmp1.y = 10 - i
+    #     tmp1.orientation = 10 - i
+    # lastframe = frame
+    #
+    # wm.update_wm(frame, lastframe, ColorEnum.Blue)
+    # print(wm.opp[2].pos)
 
-    wm.update_wm(frame, lastframe, ColorEnum.Blue)
-    print(wm.opp[2].pos)
+    game_state = GameState()
+    foul_info = messages_pb2.FoulInfo()
+    foul_info.type = messages_pb2.FoulInfo.FoulType.FreeBallLeftBot
+    foul_info.phase = messages_pb2.FoulInfo.PhaseType.PenaltyShootout
+    foul_info.actor = messages_pb2.Side.Opponent
+    game_state.update_gamestate(foul_info)
+    print(game_state.state)
+    print(game_state.phase)
 
