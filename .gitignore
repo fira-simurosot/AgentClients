@@ -2,3 +2,5 @@
 cmake-build-debug
 handyController/env
 handyController/messages
+python/env
+*__pycache__*
