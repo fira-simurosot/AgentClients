@@ -93,37 +93,43 @@ class GameState:
         self.state = GameStateEnum.PlayOn
         self.phase = GamePhaseEnum.FirstHalf
 
+        self.dict_state_our = {
+                        messages_pb2.FoulInfo.FoulType.PlayOn               :   GameStateEnum.PlayOn,
+                        messages_pb2.FoulInfo.FoulType.PlaceKick            :   GameStateEnum.OurPlaceKick,
+                        messages_pb2.FoulInfo.FoulType.PenaltyKick          :   GameStateEnum.OurPenaltyKick,
+                        messages_pb2.FoulInfo.FoulType.FreeKick             :   GameStateEnum.OurFreeKick,
+                        messages_pb2.FoulInfo.FoulType.GoalKick             :   GameStateEnum.OurGoalKick,
+                        messages_pb2.FoulInfo.FoulType.FreeBallLeftTop      :   GameStateEnum.OurFreeBallLeftTop,
+                        messages_pb2.FoulInfo.FoulType.FreeBallRightTop     :   GameStateEnum.OurFreeBallRightTop,
+                        messages_pb2.FoulInfo.FoulType.FreeBallLeftBot      :   GameStateEnum.OurFreeBallLeftBot,
+                        messages_pb2.FoulInfo.FoulType.FreeBallRightBot     :   GameStateEnum.OurFreeBallRightBot
+                        }
+        self.dict_state_their = {
+                        messages_pb2.FoulInfo.FoulType.PlayOn               :   GameStateEnum.PlayOn,
+                        messages_pb2.FoulInfo.FoulType.PlaceKick            :   GameStateEnum.TheirPlaceKick,
+                        messages_pb2.FoulInfo.FoulType.PenaltyKick          :   GameStateEnum.TheirPenaltyKick,
+                        messages_pb2.FoulInfo.FoulType.FreeKick             :   GameStateEnum.TheirFreeKick,
+                        messages_pb2.FoulInfo.FoulType.GoalKick             :   GameStateEnum.TheirGoalKick,
+                        messages_pb2.FoulInfo.FoulType.FreeBallLeftTop      :   GameStateEnum.TheirFreeBallLeftTop,
+                        messages_pb2.FoulInfo.FoulType.FreeBallRightTop     :   GameStateEnum.TheirFreeBallRightTop,
+                        messages_pb2.FoulInfo.FoulType.FreeBallLeftBot      :   GameStateEnum.TheirFreeBallLeftBot,
+                        messages_pb2.FoulInfo.FoulType.FreeBallRightBot     :   GameStateEnum.TheirFreeBallRightBot
+                        }
+        self.dict_phase = {
+                        messages_pb2.FoulInfo.PhaseType.FirstHalf           :   GamePhaseEnum.FirstHalf,
+                        messages_pb2.FoulInfo.PhaseType.SecondHalf          :   GamePhaseEnum.SecondHalf,
+                        messages_pb2.FoulInfo.PhaseType.PenaltyShootout     :   GamePhaseEnum.PenaltyShootout
+                        }
+
     def update_gamestate(self, foul_info):
         dict_state = {}
-        dict_phase = {}
         if foul_info.actor == messages_pb2.Side.Self:
-            dict_state = {messages_pb2.FoulInfo.FoulType.PlayOn             :   GameStateEnum.PlayOn,
-                          messages_pb2.FoulInfo.FoulType.PlaceKick          :   GameStateEnum.OurPlaceKick,
-                          messages_pb2.FoulInfo.FoulType.PenaltyKick        :   GameStateEnum.OurPenaltyKick,
-                          messages_pb2.FoulInfo.FoulType.FreeKick           :   GameStateEnum.OurFreeKick,
-                          messages_pb2.FoulInfo.FoulType.GoalKick           :   GameStateEnum.OurGoalKick,
-                          messages_pb2.FoulInfo.FoulType.FreeBallLeftTop    :   GameStateEnum.OurFreeBallLeftTop,
-                          messages_pb2.FoulInfo.FoulType.FreeBallRightTop   :   GameStateEnum.OurFreeBallRightTop,
-                          messages_pb2.FoulInfo.FoulType.FreeBallLeftBot    :   GameStateEnum.OurFreeBallLeftBot,
-                          messages_pb2.FoulInfo.FoulType.FreeBallRightBot   :   GameStateEnum.OurFreeBallRightBot
-                          }
+            dict_state = self.dict_state_our
         else:
-            dict_state = {messages_pb2.FoulInfo.FoulType.PlayOn             :   GameStateEnum.PlayOn,
-                          messages_pb2.FoulInfo.FoulType.PlaceKick          :   GameStateEnum.TheirPlaceKick,
-                          messages_pb2.FoulInfo.FoulType.PenaltyKick        :   GameStateEnum.TheirPenaltyKick,
-                          messages_pb2.FoulInfo.FoulType.FreeKick           :   GameStateEnum.TheirFreeKick,
-                          messages_pb2.FoulInfo.FoulType.GoalKick           :   GameStateEnum.TheirGoalKick,
-                          messages_pb2.FoulInfo.FoulType.FreeBallLeftTop    :   GameStateEnum.TheirFreeBallLeftTop,
-                          messages_pb2.FoulInfo.FoulType.FreeBallRightTop   :   GameStateEnum.TheirFreeBallRightTop,
-                          messages_pb2.FoulInfo.FoulType.FreeBallLeftBot    :   GameStateEnum.TheirFreeBallLeftBot,
-                          messages_pb2.FoulInfo.FoulType.FreeBallRightBot   :   GameStateEnum.TheirFreeBallRightBot
-                          }
-            dict_phase = {messages_pb2.FoulInfo.PhaseType.FirstHalf         :   GamePhaseEnum.FirstHalf,
-                          messages_pb2.FoulInfo.PhaseType.SecondHalf        :   GamePhaseEnum.SecondHalf,
-                          messages_pb2.FoulInfo.PhaseType.PenaltyShootout   :   GamePhaseEnum.PenaltyShootout
-            }
+            dict_state = self.dict_state_their
+
             self.state = dict_state[foul_info.type]
-            self.phase = dict_phase[foul_info.phase]
+            self.phase = self.dict_phase[foul_info.phase]
 
 
 if __name__ == "__main__":
