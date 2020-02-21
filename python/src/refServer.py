@@ -7,6 +7,7 @@ from protoCompiled import common_pb2
 import grpc, time
 from concurrent import futures
 from src.utilities import ColorEnum
+from src.utilities import ROBOTS_NUM
 
 
 client_Register = None
@@ -52,24 +53,26 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
         return ball
 
     def SetFormerRobots(self, request, context):
-        # print("SetFormerRobots")
+        print('SetFormerRobots')
+        positions = client_SetLaterRobots(request.frame, request.foulInfo)
         robot = messages_pb2.Robots()
-        for i in range(5):
+        for i in range(ROBOTS_NUM):
             myrobot = robot.robots.add()
             myrobot.robot_id = i
-            myrobot.x = 5+i
-            myrobot.y = 5+i
+            myrobot.x = positions[i].x
+            myrobot.y = positions[i].y
             myrobot.orientation = 0
         return robot
 
     def SetLaterRobots(self, request, context):
-        # print("SetLaterRobots")
+        print('SetLaterRobots')
+        positions = client_SetLaterRobots(request.frame, request.foulInfo)
         robot = messages_pb2.Robots()
-        for i in range(5):
+        for i in range(ROBOTS_NUM):
             myrobot = robot.robots.add()
             myrobot.robot_id = i
-            myrobot.x = 5 + i
-            myrobot.y = 5 + i
+            myrobot.x = positions[i].x
+            myrobot.y = positions[i].y
             myrobot.orientation = 0
         return robot
 
