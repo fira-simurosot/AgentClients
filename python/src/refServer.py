@@ -45,10 +45,11 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
         return command
 
     def SetBall(self, request, context):
-        # print("SetBall")
+        print("SetBall")
+        pos = client_SetBall(request.frame, request.foulInfo)
         ball = common_pb2.Ball()
-        ball.x = 0.5
-        ball.y = 0.5
+        ball.x = pos.x
+        ball.y = pos.y
         ball.z = 0
         return ball
 

@@ -16,6 +16,12 @@ class ColorEnum(Enum):
     Blue = 2
 
 
+class WheelSpeed:
+    def __init__(self):
+        self.right = 0
+        self.left = 0
+
+
 class Robot:
     def __init__(self):
         self.id = -1

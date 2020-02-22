@@ -23,7 +23,7 @@ class Soccer:
             tmp1.orientation = 0
         self.communication = Communication('127.0.0.1', 50053)
 
-    def update_einiroment(self, frame, foul_info):
+    def update_environment(self, frame, foul_info):
         self.game_state.update_gamestate(foul_info)
         self.wm.update_wm(frame, self.lastframe, self.our_color)
         self.lastframe = frame
@@ -36,11 +36,15 @@ class Soccer:
     def RunStrategy(self):
         pass
 
-    def SetBall(self):
-        pass
+    def SetBall(self, frame, foul_info):
+        print('SetBall')
+        self.update_environment(frame, foul_info)
+        ball_position = Vector2D(-0.9, 0)
+        return ball_position
+
 
     def SetFormerRobots(self, frame, foul_info):
-        self.update_einiroment(frame, foul_info)
+        self.update_environment(frame, foul_info)
         positions = []
         for i in range(ROBOTS_NUM):
             positions.append(Vector2D())
@@ -52,7 +56,7 @@ class Soccer:
         return positions
 
     def SetLaterRobots(self, frame, foul_info):
-        self.update_einiroment(frame, foul_info)
+        self.update_environment(frame, foul_info)
         positions = []
         for i in range(ROBOTS_NUM):
             positions.append(Vector2D())
