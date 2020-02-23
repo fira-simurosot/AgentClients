@@ -4,6 +4,7 @@ sys.path.insert(1, '../protoCompiled')
 
 from enum import Enum
 from src.geom import Vector2D
+from sympy import Point2D
 from protoCompiled import common_pb2
 from protoCompiled.REF2CLI import messages_pb2
 
@@ -66,6 +67,7 @@ class WorldModel:
 
         if our_color == ColorEnum.Blue:
             self.our, self.opp = self.opp, self.our
+
 
 class GameStateEnum(Enum):
     PlayOn = 1

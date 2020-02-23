@@ -35,13 +35,14 @@ class RefereeServicer(service_pb2_grpc.RefereeServicer):
         return response
 
     def RunStrategy(self, request, context):
-        # print('RunStrategy')
+        print('RunStrategy')
+        wheel_speeds = client_RunStrategy(request.frame, request.foulInfo)
         command = messages_pb2.Command()
-        for i in range(5):
+        for i in range(ROBOTS_NUM):
             wheelspeed = command.wheels.add()
             wheelspeed.robot_id = i
-            wheelspeed.right = 10
-            wheelspeed.left = -10
+            wheelspeed.right = wheel_speeds[i].right
+            wheelspeed.left = wheel_speeds[i].left
         return command
 
     def SetBall(self, request, context):
