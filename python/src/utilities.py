@@ -94,6 +94,7 @@ class GamePhaseEnum(Enum):
     FirstHalf = 1
     SecondHalf = 2
     PenaltyShootout = 3
+    Stopped = 4
 
 
 class GameState:
@@ -126,7 +127,8 @@ class GameState:
         self.dict_phase = {
                         messages_pb2.FoulInfo.PhaseType.FirstHalf           :   GamePhaseEnum.FirstHalf,
                         messages_pb2.FoulInfo.PhaseType.SecondHalf          :   GamePhaseEnum.SecondHalf,
-                        messages_pb2.FoulInfo.PhaseType.PenaltyShootout     :   GamePhaseEnum.PenaltyShootout
+                        messages_pb2.FoulInfo.PhaseType.PenaltyShootout     :   GamePhaseEnum.PenaltyShootout,
+                        messages_pb2.FoulInfo.PhaseType.Stopped             :   GamePhaseEnum.Stopped
                         }
 
     def update_gamestate(self, foul_info):
@@ -134,8 +136,8 @@ class GameState:
             self.state = self.dict_state_our[foul_info.type]
         else:
             self.state = self.dict_state_their[foul_info.type]
-
         self.phase = self.dict_phase[foul_info.phase]
+
 
 
 if __name__ == "__main__":
