@@ -1,4 +1,4 @@
-from src.utilities import ROBOTS_NUM, WheelSpeed
+from src.utilities import ROBOTS_NUM, WheelSpeed, WorldModel
 
 
 class PlayOn():
@@ -9,6 +9,7 @@ class PlayOn():
         self.cnt = 0
 
     def playon(self, wm):
+        self.wm = wm
         self.cnt += 1
         print(self.cnt)
         if self.cnt < 50:
