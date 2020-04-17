@@ -27,5 +27,6 @@ jobs:
       uses: lukka/run-cmake@v2.0
       with:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/cpp/CMakeLists.txt
         cmakeAppendedArgs: -DCMAKE_CXX_COMPILER=${{ matrix.cxx-compiler }}
 
