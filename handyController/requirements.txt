@@ -1,4 +1,4 @@
-grpcio==1.27.1
+grpcio==1.53.0
 grpcio-tools==1.27.1
 protobuf==3.18.3
 PyQt5==5.14.1
